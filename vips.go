@@ -277,18 +277,12 @@ func Resize(buf []byte, o Options) ([]byte, error) {
 	}
 	C.g_object_unref(C.gpointer(affined))
 
-	// Always convert to sRGB colour space
-	colourspaced := C.vips_image_new()
-
-	C.vips_colourspace_0(canvased, &colourspaced, C.VIPS_INTERPRETATION_sRGB)
-	C.g_object_unref(C.gpointer(canvased))
-
 	// Finally save
 	length := C.size_t(0)
 	ptr := C.malloc(C.size_t(len(buf)))
 
-	C.vips_jpegsave_custom(colourspaced, &ptr, &length, 1, C.int(o.Quality), 0)
-	C.g_object_unref(C.gpointer(colourspaced))
+	C.vips_jpegsave_custom(canvased, &ptr, &length, 1, C.int(o.Quality), 0)
+	C.g_object_unref(C.gpointer(canvased))
 
 	// get back the buffer
 	buf = C.GoBytes(ptr, C.int(length))

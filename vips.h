@@ -65,5 +65,31 @@ vips_extract_area_0(VipsImage *in, VipsImage **out, int left, int top, int width
 int
 vips_jpegsave_custom(VipsImage *in, void **buf, size_t *len, int strip, int quality, int interlace)
 {
-    return vips_jpegsave_buffer(in, buf, len, "strip", strip, "Q", quality, "optimize_coding", TRUE, "interlace", interlace, NULL);
+    // return vips_jpegsave_buffer(in, buf, len, "strip", strip, "Q", quality, "optimize_coding", TRUE, "interlace", interlace, NULL);
+    return vips_jpegsave_buffer(in, buf, len, "Q", quality, "optimize_coding", TRUE, NULL);
+}
+
+int vips_copy_icc_profile(VipsImage *in, VipsImage **out) {
+	return vips_icc_transform(in, out, "", "embedded", TRUE, NULL);
+}
+
+
+int vips_get_x_size(VipsImage *in) {
+	return in->Xsize;
+}
+
+int vips_get_y_size(VipsImage *in) {
+	return in->Ysize;
+}
+
+int vips_get_bands(VipsImage *in) {
+	return in->Bands;
+}
+
+int vips_get_type(VipsImage *in) {
+	return in->Type;
+}
+
+int vips_get_size_of_header(VipsImage *in) {
+	return in->sizeof_header;
 }
